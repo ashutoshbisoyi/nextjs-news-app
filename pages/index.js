@@ -9,7 +9,7 @@ export default function Home() {
         <title>The News Wave</title>
         <meta
           name='description'
-          content='The news wave provides you with all the latest news at one place'
+          content='The News Wave - Your one stop news destination. Get latest news updates within 1hour from 8 top catagories like entertainment, sports, business and more.'
         />
         <link rel='icon' href='/favicon.ico' />
       </Head>

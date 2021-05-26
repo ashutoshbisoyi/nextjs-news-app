@@ -3,6 +3,7 @@ import styles from '../../../styles/Feed.module.css';
 import { useRouter } from 'next/router';
 import ReactImageFallback from 'react-image-fallback';
 import { GiPartyFlags, GiHealthNormal } from 'react-icons/gi';
+import Head from 'next/head';
 import {
   FaBusinessTime,
   FaArchway,
@@ -26,6 +27,14 @@ const Feed = ({ apiJson, pageNumber, url }) => {
 
   return (
     <div className='container'>
+      <Head>
+        <title>News Wave- Top news from {activeCatagory} catagory</title>
+        <meta
+          name='description'
+          content='The News Wave - Your one stop news destination. Get latest news updates within 1hour from 8 top catagories like entertainment, sports, business and more.'
+        />
+        <link rel='icon' href='/favicon.ico' />
+      </Head>
       <header className={styles.header}>
         <h1>The News Wave</h1>
         <ul>
@@ -212,11 +221,7 @@ export const getServerSideProps = async (pageContext) => {
 
   const apiResponse = await fetch(url);
 
-  console.log('url', url);
-
   const apiJson = await apiResponse.json();
-
-  console.log(apiJson);
 
   return {
     props: {
