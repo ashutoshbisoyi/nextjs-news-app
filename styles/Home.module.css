@@ -1,7 +1,7 @@
 .main {
   position: relative;
   height: 100vh;
-  background-color: #ececec;
+  background-color: #eeeeee;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -37,4 +37,21 @@
   bottom: -150px;
   left: -150px;
   transition: all 0.5s ease;
+}
+@media (max-width: 800px) {
+  .main h1 {
+    font-size: 3em;
+  }
+  .main p,
+  .main button {
+    font-size: 1em;
+  }
+  .illustration {
+    transform: scale(0.6);
+    bottom: -190px;
+    left: -190px;
+  }
+  .main button:hover + .illustration {
+    transform: translate(30px, -30px) scale(0.8);
+  }
 }

@@ -3,6 +3,7 @@ import styles from '../../../styles/Feed.module.css';
 import { useRouter } from 'next/router';
 import ReactImageFallback from 'react-image-fallback';
 import { GiPartyFlags, GiHealthNormal } from 'react-icons/gi';
+import Image from 'next/image';
 import {
   FaBusinessTime,
   FaArchway,
@@ -13,17 +14,15 @@ import {
   FaAngleDoubleLeft,
   FaSearch,
 } from 'react-icons/fa';
-const Feed = ({ apiJson, pageNumber, url }) => {
+const SearchResults = ({ apiJson, pageNumber, url }) => {
   const [searchTerm, setSearchTerm] = useState();
   const router = useRouter();
   const maxPage = Math.ceil(apiJson.totalResults / 10);
-  const { slug, catagory } = router.query;
-  const [activeCatagory, setActiveCatagory] = useState(`${catagory}`);
-
+  const { searchterm } = router.query;
   const handleSearch = () => {
     router.push(`/search/${searchTerm.replace(/ +/g, '')}/1`);
   };
-
+  console.log(apiJson);
   return (
     <div className='container'>
       <header className={styles.header}>
@@ -44,36 +43,24 @@ const Feed = ({ apiJson, pageNumber, url }) => {
           <h2>Select Catagory</h2>
           <ul>
             <li
-              className={
-                activeCatagory === 'general' ? styles.activeCatagory : ''
-              }
               onClick={() => {
                 router.push(`/feed/general/1`);
-                setActiveCatagory('general');
               }}
             >
               <FaArchway />
               <p>General</p>
             </li>
             <li
-              className={
-                activeCatagory === 'business' ? styles.activeCatagory : ''
-              }
               onClick={() => {
                 router.push(`/feed/business/1`);
-                setActiveCatagory('business');
               }}
             >
               <FaBusinessTime />
               <p>Business</p>
             </li>
             <li
-              className={
-                activeCatagory === 'entertainment' ? styles.activeCatagory : ''
-              }
               onClick={() => {
                 router.push(`/feed/entertainment/1`);
-                setActiveCatagory('entertainment');
               }}
             >
               <GiPartyFlags />
@@ -81,48 +68,32 @@ const Feed = ({ apiJson, pageNumber, url }) => {
             </li>
 
             <li
-              className={
-                activeCatagory === 'health' ? styles.activeCatagory : ''
-              }
               onClick={() => {
                 router.push(`/feed/health/1`);
-                setActiveCatagory('health');
               }}
             >
               <GiHealthNormal />
               <p>Health</p>
             </li>
             <li
-              className={
-                activeCatagory === 'science' ? styles.activeCatagory : ''
-              }
               onClick={() => {
                 router.push(`/feed/science/1`);
-                setActiveCatagory('science');
               }}
             >
               <FaCompass />
               <p>Science</p>
             </li>
             <li
-              className={
-                activeCatagory === 'sports' ? styles.activeCatagory : ''
-              }
               onClick={() => {
                 router.push(`/feed/sports/1`);
-                setActiveCatagory('sports');
               }}
             >
               <FaChessKnight />
               <p>Sports</p>
             </li>
             <li
-              className={
-                activeCatagory === 'technology' ? styles.activeCatagory : ''
-              }
               onClick={() => {
                 router.push(`/feed/technology/1`);
-                setActiveCatagory('technology');
               }}
             >
               <FaCogs />
@@ -145,32 +116,50 @@ const Feed = ({ apiJson, pageNumber, url }) => {
           </button>
         </div>
       </div>
-      <h2 className={styles.feedHeading}>Top Headlines</h2>
-      <div className={styles.articleContainer}>
-        {apiJson.articles.map((value, index) => {
-          return (
-            <div className={styles.articleCard} key={index}>
-              <ReactImageFallback
-                src={value.urlToImage}
-                fallbackImage='https://www.thermaxglobal.com/wp-content/uploads/2020/05/image-not-found.jpg'
-                initialImage='https://images.pexels.com/photos/518543/pexels-photo-518543.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'
-                alt='image'
-                className={styles.image}
-              />
-              <h1>{value.title}</h1>
-              <p className={styles.publishedAt}>{value.publishedAt}</p>
-              <p>{value.description}</p>
-              <button
-                onClick={() => {
-                  window.location.href = value.url;
-                }}
-              >
-                Read Full Article
-              </button>
-            </div>
-          );
-        })}
-      </div>
+      <h2 className={styles.feedHeading}>
+        Your search result for "{searchterm}"
+      </h2>
+      {apiJson.articles && apiJson.articles.length >= 1 ? (
+        <div className={styles.articleContainer}>
+          {apiJson.articles.map((value, index) => {
+            return (
+              <div className={styles.articleCard} key={index}>
+                <ReactImageFallback
+                  src={value.urlToImage}
+                  fallbackImage='https://www.thermaxglobal.com/wp-content/uploads/2020/05/image-not-found.jpg'
+                  initialImage='https://images.pexels.com/photos/518543/pexels-photo-518543.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'
+                  alt='image'
+                  className={styles.image}
+                />
+                <h1>{value.title}</h1>
+                <p className={styles.publishedAt}>{value.publishedAt}</p>
+                <p>{value.description}</p>
+                <button
+                  onClick={() => {
+                    window.location.href = value.url;
+                  }}
+                >
+                  Read Full Article
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className={styles.empty}>
+          <div>
+            <Image src='/img2.png' width={200} height={200} alt='img' />
+            <h4>Oops! No news for "{searchterm}"</h4>
+            <p>
+              Try again with a new term or{' '}
+              <span onClick={() => router.push('/feed/general/1')}>
+                click here
+              </span>{' '}
+              to start reading.
+            </p>
+          </div>
+        </div>
+      )}
       <div className={styles.paginationBar}>
         <div
           className={pageNumber > 1 ? styles.active : styles.disabled}
@@ -197,7 +186,8 @@ const Feed = ({ apiJson, pageNumber, url }) => {
 
 export const getServerSideProps = async (pageContext) => {
   const pageNumber = pageContext.query.slug;
-  const catagory = pageContext.query.catagory;
+  const searchTerm = pageContext.query.searchterm;
+  let apiJson = [];
 
   if (!pageNumber || pageNumber < 1 || pageNumber > 5) {
     return {
@@ -208,15 +198,13 @@ export const getServerSideProps = async (pageContext) => {
     };
   }
 
-  const url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=fba24b2484974aa5893d35c28f597364&pageSize=10&page=${pageNumber}&category=${catagory}`;
+  const url = `https://newsapi.org/v2/everything?q=${searchTerm}&sortBy=popularity&apiKey=fba24b2484974aa5893d35c28f597364&pageSize=10&page=${pageNumber}`;
 
   const apiResponse = await fetch(url);
 
   console.log('url', url);
 
-  const apiJson = await apiResponse.json();
-
-  console.log(apiJson);
+  apiJson = await apiResponse.json();
 
   return {
     props: {
@@ -226,4 +214,5 @@ export const getServerSideProps = async (pageContext) => {
     },
   };
 };
-export default Feed;
+
+export default SearchResults;

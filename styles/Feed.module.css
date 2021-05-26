@@ -12,18 +12,24 @@
   font-weight: normal;
   color: #303030;
 }
+.header ul li:hover {
+  color: #000;
+  cursor: pointer;
+}
 .feedHeading {
   font-weight: normal;
   font-size: 1.5em;
   margin: 2em 0 0;
   background-color: #000;
   width: fit-content;
-  padding: 0.3em;
+  padding: 0.3em 0.6em;
   color: #fff;
+  border-radius: 3px;
 }
 .catagoryWrapper {
   margin-top: 3em;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
 }
@@ -134,9 +140,44 @@
   color: #c0c0c0;
   cursor: not-allowed;
 }
+.empty {
+  padding: 3em 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.empty img {
+  filter: grayscale(1);
+}
+.empty h4 {
+  font-weight: normal;
+  font-size: 2em;
+  margin: 0.3em 0;
+  color: #303030;
+}
+.empty p {
+  color: #8d8d8d;
+}
+.empty p span {
+  color: #000;
+  text-decoration: underline;
+  cursor: pointer;
+}
 @media (max-width: 800px) {
   .articleContainer {
     display: flex;
     flex-direction: column;
+    padding: 2em 0;
+  }
+  .catagoryWrapper h2 {
+    margin-top: 1em;
+  }
+  .feedHeading {
+    font-size: 1em;
+    margin-top: 2em;
+  }
+  .articleCard h1 {
+    font-size: 1.3em;
   }
 }
