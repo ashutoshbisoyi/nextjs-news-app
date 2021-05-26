@@ -134,8 +134,8 @@ const SearchResults = ({ apiJson, pageNumber, url }) => {
               <div className={styles.articleCard} key={index}>
                 <ReactImageFallback
                   src={value.urlToImage}
-                  fallbackImage='https://www.thermaxglobal.com/wp-content/uploads/2020/05/image-not-found.jpg'
-                  initialImage='https://images.pexels.com/photos/518543/pexels-photo-518543.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'
+                  fallbackImage='/broken.png'
+                  initialImage='/initial.png'
                   alt='image'
                   className={styles.image}
                 />

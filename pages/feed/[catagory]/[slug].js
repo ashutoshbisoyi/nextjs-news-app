@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import ReactImageFallback from 'react-image-fallback';
 import { GiPartyFlags, GiHealthNormal } from 'react-icons/gi';
 import Head from 'next/head';
+import Image from 'next/image';
 import {
   FaBusinessTime,
   FaArchway,
@@ -155,31 +156,48 @@ const Feed = ({ apiJson, pageNumber, url }) => {
         </div>
       </div>
       <h2 className={styles.feedHeading}>Top Headlines</h2>
-      <div className={styles.articleContainer}>
-        {apiJson.articles.map((value, index) => {
-          return (
-            <div className={styles.articleCard} key={index}>
-              <ReactImageFallback
-                src={value.urlToImage}
-                fallbackImage='https://www.thermaxglobal.com/wp-content/uploads/2020/05/image-not-found.jpg'
-                initialImage='https://images.pexels.com/photos/518543/pexels-photo-518543.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'
-                alt='image'
-                className={styles.image}
-              />
-              <h1>{value.title}</h1>
-              <p className={styles.publishedAt}>{value.publishedAt}</p>
-              <p>{value.description}</p>
-              <button
-                onClick={() => {
-                  window.location.href = value.url;
-                }}
-              >
-                Read Full Article
-              </button>
-            </div>
-          );
-        })}
-      </div>
+      <h2 className={styles.feedHeading}>{activeCatagory}</h2>
+      {apiJson.articles && apiJson.articles.length >= 1 ? (
+        <div className={styles.articleContainer}>
+          {apiJson.articles.map((value, index) => {
+            return (
+              <div className={styles.articleCard} key={index}>
+                <ReactImageFallback
+                  src={value.urlToImage}
+                  fallbackImage='/broken.png'
+                  initialImage='/initial.png'
+                  alt='image'
+                  className={styles.image}
+                />
+                <h1>{value.title}</h1>
+                <p className={styles.publishedAt}>{value.publishedAt}</p>
+                <p>{value.description}</p>
+                <button
+                  onClick={() => {
+                    window.location.href = value.url;
+                  }}
+                >
+                  Read Full Article
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className={styles.empty}>
+          <div>
+            <Image src='/img2.png' width={200} height={200} alt='img' />
+            <h4>Oops! No news Found</h4>
+            <p>
+              Try again with a new term or{' '}
+              <span onClick={() => router.push('/feed/general/1')}>
+                click here
+              </span>{' '}
+              to start reading.
+            </p>
+          </div>
+        </div>
+      )}
       <div className={styles.paginationBar}>
         <div
           className={pageNumber > 1 ? styles.active : styles.disabled}
